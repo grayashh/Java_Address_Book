@@ -22,3 +22,6 @@
 # 연락처 정의 및 관리
 • 연락처는 이름/나이/전화번호 세 개로 구성됨
 • 등록 순서대로 저장이 되며, 중간에 특정 연락처를 삭제하면 순서가 재정렬
+
+# 프로그램 구조
+<img width="882" alt="image" src="https://user-images.githubusercontent.com/49053676/173181490-10ffccb5-1768-4cf3-84da-ca95b06e4992.png">
