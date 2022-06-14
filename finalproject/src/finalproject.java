@@ -11,16 +11,18 @@ import java.util.Scanner;
 import java.io.IOException;
 
 public class finalproject {
-	static final String rootPath = System.getProperty("user.dir");
-	static final String address = rootPath + "//juso.txt";
-	static File file = new File(address);
+	static final String ROOT_PATH = System.getProperty("user.dir"); // 현재 작업중인 디렉토리를 가져옴
+	static final String ADDRESS = ROOT_PATH + "//juso.txt"; // juso.txt를 저장할 위치 지정
+	static File file = new File(ADDRESS); // file을 ADDRESS 위치에 생성
 
 	public static void main(String[] args) throws IOException {
+		//Intro
 		System.out.println("[기말프로젝트] 60221348 김태강");
 		System.out.println("[연락처 관리 프로그램]");
 
-		List<PersonInfo> person = new ArrayList<>();
-		if (file.createNewFile()) {
+		List<PersonInfo> person = new ArrayList<>(); // person List 객체를 생성
+
+		if (file.createNewFile()) { // 파일이 없다면 print_menu로 파일이 있다면 readTxT 후 print_menu
 			print_menu(person);
 		} else {
 			readTxt(person);
@@ -28,12 +30,13 @@ public class finalproject {
 		}
 	}
 
-	private static void print_menu(List<PersonInfo> person) throws IOException {
-		boolean runx = true;
-		while (runx) {
-			boolean rune = true;
+	//메뉴 출력
+	private static void print_menu(List<PersonInfo> person)throws IOException {
+		boolean run = true; // 메뉴 반복 true
+		while (run) {
+			boolean in_run = true;
 			int num = 0;
-			Scanner sc = new Scanner(System.in);	
+			Scanner sc = new Scanner(System.in); // Scanner 객체 생성
 			System.out.println();
 			System.out.println("1. 연락처 출력");
 			System.out.println("2. 연락처 등록");
@@ -42,40 +45,39 @@ public class finalproject {
 			System.out.println();
 
 			System.out.print("메뉴를 선택하세요: ");
-			while(rune) {
+			while(in_run) { // 잘못된 메뉴 반복 입력 받기
 			try{
 				num = sc.nextInt();
 			switch (num) {
-				case 1 -> {
+				case 1 -> { // 연락처 출력
 					System.out.println();
-					readTxt(person);
-					update(person);
-					writeTxt(person);
+					readTxt(person); // juso.txt에서 텍스트를 읽어와 list에 저장
 					view_juso(person);
 					System.out.println();
-					rune = false;
+					in_run = false;
 				}
-				case 2 -> {
+				case 2 -> { //연락처 추가
 					System.out.println();
 					add_juso(sc, person);
-					rune = false;
+					in_run = false;
 				}
-				case 3 -> {
+				case 3 -> { // 연락처 삭제
 					delete_juso(sc, person);
-					rune = false;
+					in_run = false;
 				}
-				case 4 -> {
+				case 4 -> { // 프로그램 종료
 					System.out.println("프로그램을 종료합니다.");
+					run = false;
 					System.exit(0);
 				}
-				default -> {
+				default -> { // 1~4 외의 숫자를 입력했을 시 실행
 					System.out.println();
 					System.out.print("잘못된 메뉴입니다. 메뉴를 다시 선택하세요: ");
 				}
 			}
 		}
-			catch(Exception e){
-				sc = new Scanner(System.in);
+			catch(Exception e){ // 숫자 외 다른 문자를 입력했을 시 실행
+				sc = new Scanner(System.in); // Scanner 초기화
 				System.out.print("잘못된 메뉴입니다. 메뉴를 다시 선택하세요: ");
 			}
 		}
@@ -85,38 +87,36 @@ public class finalproject {
 	// 주소록 출력
 	private static void view_juso(List<PersonInfo> person) {
 
-		if (person.size() == 0) {
+		if (person.size() == 0) { // 만약 주소록 리스트 size가 0이라면 메세지 출력
 			System.out.println("등록된 연락처가 없습니다.");
 		}
-
-		Reader fr = null;
-		BufferedReader br = null;
 		try {
-			fr = new FileReader(address);
-			br = new BufferedReader(fr);
+			Reader fr = new FileReader(ADDRESS);
+			BufferedReader br = new BufferedReader(fr);
 			String line = "";
-			while ((line = br.readLine()) != null) {
+			while ((line = br.readLine()) != null) { // 한 줄씩 불러와 1lne에 넣어 출력하고 불러온 값이 없다면(null) break	
 				System.out.println(line);
 			}
-		} catch (Exception e) {
+			br.close();
+		} catch (Exception e) { // 파일 입출력 예외처리
 			e.printStackTrace();
 		}
 	}
 
 	// 주소록 추가
-	private static void add_juso(Scanner sc, List<PersonInfo> person) {
+	private static void add_juso(Scanner sc, List<PersonInfo> person) { // 연락처 추가 메소드
 		String name;
 		String age;
 		String tel;
-		System.out.print("이름 입력: ");
+		System.out.print("이름 입력: "); // 이름을 입력 받는다
 		name = sc.next();
-		System.out.print("나이 입력: ");
+		System.out.print("나이 입력: "); // 나이를 입력 받는다
 		age = sc.next();
-		System.out.print("번호 입력: ");
+		System.out.print("번호 입력: "); // 번호를 입력 받는다
 		tel = sc.next();
-		person.add(new PersonInfo(name, age, tel));
-		update(person);
-		writeTxt(person);
+		person.add(new PersonInfo(name, age, tel)); // person List에 PersonInfo 객체 추가
+		update(person); // 번호 순서대로 넘버링
+		writeTxt(person); // 텍스트 쓰기
 	}
 
 	// 주소록 삭제
@@ -124,10 +124,9 @@ public class finalproject {
 		boolean run2 = true;
 		int num2 = 0;
 		int del = 0;
-
-		while (run2) {
-			boolean rune = true;
-
+		boolean in_run = true;
+		
+		while (run2) { // 고급 기능 반복
 			System.out.println();
 			System.out.println("1. 순번 삭제");
 			System.out.println("2. 이름 삭제");
@@ -136,104 +135,107 @@ public class finalproject {
 			System.out.println();
 
 			System.out.print("세부 메뉴를 선택하세요: ");
-			while(rune) {
+
+			in_run = true;
+			
+			while(in_run) { // 잘못된 입력 다시 받기 반복
 			try {
 				num2 = sc.nextInt();
-			}catch (Exception e) {
-				sc = new Scanner(System.in);
+			}catch (Exception e) { // 입출력 예외처리
+				sc = new Scanner(System.in); // Scanner 초기화
 			}
 
 			switch (num2) {
-				case 1 -> {
+				case 1 -> { // 순번 삭제
 					boolean run = true;
-					while (run) {
+					while (run) { // 잘못된 입력 다시 받기 반복
 						try {
 							System.out.println();
 							System.out.print("삭제할 연락처 순번은? ");
 							del = sc.nextInt();
-							person.remove(del - 1);
+							person.remove(del - 1); // del번째 원소 연락처 리스트에서 삭제
 							System.out.print(del + "번 연락처가 삭제되었습니다.\n");
+							// 입력 다시 받기 loop 빠져나오기
 							run = false;
-							run2 = false;
-							rune = false;
-							break;
-						} catch (Exception e) {
-							sc = new Scanner(System.in);
+							run2 = false; 
+							in_run = false;
+						} catch (Exception e) { // 입출력 예외처리
+							sc = new Scanner(System.in); // Scanner 초기화
 							System.out.println("존재하지 않는 연락처입니다.");
-							continue;
 						}
 					}
-					update(person);
-					writeTxt(person);
-					run2 = false;
+					update(person); // 넘버링
+					writeTxt(person); // 파일 쓰기
 				}
-				case 2 -> {
+				case 2 -> { // 이름 삭제
 					boolean run = true;
-					while (run) {
+					while (run) {  // 잘못된 입력 다시 받기 반복
 				try{
 					System.out.println();
 					System.out.print("삭제할 연락처 이름은? ");
 					String str = sc.next();
-					for (int i = 0; i < person.size(); i++) {
-						PersonInfo sercageerson2 = (PersonInfo) person.get(i);
-						if (sercageerson2.getName().contains(str)) {
-							person.remove(i);
-							System.out.print(sercageerson2.getName() + " 연락처가 삭제되었습니다.\n");
-							update(person);
-							writeTxt(person);
+					for (int i = 0; i < person.size(); i++) { // 연락처 list size 만큼 반복
+						PersonInfo n = (PersonInfo) person.get(i); // i번째 person list 객체를 가져옴
+						if (n.getName().equals(str)) { // i번째 객체와 입력받은 연락처 이름과 같은지 확인
+							person.remove(i); // i번째 객체 제거
+							System.out.print(n.getName() + " 연락처가 삭제되었습니다.\n");
+							update(person); // 넘버링
+							writeTxt(person); // 파일 쓰기
+							//입력 다시받기 Loop 빠져나오기
 							run = false;
 							run2 = false;
-							rune = false;
+							in_run = false;
 						}
 					}
 				}
-				catch(Exception e){
-					System.out.println("잘못된 이름입니다. 다시 입력하세요");
+				catch(Exception e){ //입출력 예외처리
+					System.out.println("잘못된 입력입니다.");
 				}
 				finally{
-					if (run2 == true) {
+					if (run2 == true) { // 연락처 list 내에 이름이 같은 사람이 없다면
 					System.out.println("존재하지 않는 연락처입니다.");
 					}
 				}
 			}
 		}
-				case 3 -> {
+				case 3 -> { // 번호 삭제
 					boolean run = true;
-					while (run) {
+					while (run) { // 잘못된 입력 다시 받기 반복
 					try{
 					System.out.println();
 					System.out.print("삭제할 연락처 번호는? ");
 					String str2 = sc.next();
-					for (int i = 0; i < person.size(); i++) {
-						PersonInfo sercageerson2 = (PersonInfo) person.get(i);
-						if (sercageerson2.getTel().contains(str2)) {
-							person.remove(i);
-							System.out.print(sercageerson2.getNum() + "번 연락처가 삭제되었습니다.\n");
+					for (int i = 0; i < person.size(); i++) { // 연락처 list size 만큼 반복
+						PersonInfo n = (PersonInfo) person.get(i); // i번째 person list 객체를 가져옴
+						if (n.getTel().equals(str2)) { // i번째 객체와 입력받은 연락처 번호과 같은지 확인
+							person.remove(i); // i번째 객체 제거
+							System.out.print(n.getNum() + "번 연락처가 삭제되었습니다.\n");
 							System.out.println();
-							update(person);
-							writeTxt(person);
+							update(person); // 넘버링
+							writeTxt(person); // 파일 쓰기
+							//입력 다시받기 Loop 빠져나오기
 							run = false;
 							run2 = false;
-							rune = false;
+							in_run = false;
 						}
 					}
 				}catch(Exception e){
-					System.out.println("잘못된 번호입니다. 다시 입력하세요");
+					System.out.println("잘못된 입력입니다.");
 				}
-				finally{
+				finally{ // 연락처 list 내에 번호가 같은 사람이 없다면
 					if (run2 == true) {
 					System.out.println("존재하지 않는 번호입니다.");
 					}
 				}
 			}
 		}
-				case 4 -> {
+				case 4 -> { // 끝내기
 					System.out.println();
 					run2 = false;
-					rune = false;
+					in_run = false;
 					print_menu(person);
 				}
-				default -> {
+				default -> { // 1~4 외의 숫자를 입력했을 시 실행
 					System.out.println();
 					System.out.print("잘못된 세부 메뉴입니다. 세부 메뉴를 다시 선택하세요: ");
 				}
@@ -244,7 +246,8 @@ public class finalproject {
 
 	// 번호 순차대로 다시 넘버링
 	private static void update(List<PersonInfo> person) {
-		for (int i = 0; i < person.size(); i++) {
+		for (int i = 0; i < person.size(); i++) { // 연락처 list size 만큼 반복
+			// 1부터 넘버링
 			PersonInfo n = (PersonInfo) person.get(i);
 			n.setNum(i + 1);
 		}
@@ -252,104 +255,88 @@ public class finalproject {
 
 	// 텍스트 읽어오기
 	private static List<PersonInfo> readTxt(List<PersonInfo> person) {
-		person.clear();
-		Reader fr = null;
-		BufferedReader br = null;
+		person.clear(); // List 비우기
 		try {
-			fr = new FileReader(address);
-			br = new BufferedReader(fr);
+			Reader fr = new FileReader(ADDRESS);
+			BufferedReader br = new BufferedReader(fr);
 			String line = "";
 			int idx;
-			String[] words = new String[3];
-			while ((line = br.readLine()) != null) {
-				idx = line.indexOf("]");
-				line = line.substring(idx + 1);
-				words = line.split("\t");
-				person.add(new PersonInfo(words[0], words[1], words[2]));
+			String[] words = new String[3]; // name, age, tel을 받을 배열 선언
+			while ((line = br.readLine()) != null) { // 한 줄씩 불러와 1lne에 넣어 출력하고 불러온 값이 없다면(null) break
+				idx = line.indexOf("]"); // ]가 위치한 index 번호 저장
+				line = line.substring(idx + 1); // ] 앞 공백 뒤 부터 line에 저장
+				words = line.split("\t"); // tab을 기준으로 단어 나누기
+				person.add(new PersonInfo(words[0], words[1], words[2])); // 나눠진 단어 주소록 list에 넣기
 			}
-		} catch (Exception e) {
+			br.close();
+		} catch (Exception e) { // 파일 입출력 예외처리
 			e.printStackTrace();
-		} finally {
-			try {
-				br.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		return person;
 	}
 
 	// 텍스트 쓰기
 	private static void writeTxt(List<PersonInfo> person) {
-		Writer fw = null;
-		BufferedWriter bw = null;
-
 		try {
-			// 주스트림
-			fw = new FileWriter(address);
+			Writer fw = new FileWriter(ADDRESS);
 
-			// 메인스트림
-			bw = new BufferedWriter(fw);
+			BufferedWriter bw = new BufferedWriter(fw);
 
-			for (int i = 0; i < person.size(); i++) {
-				PersonInfo writeperson = (PersonInfo) person.get(i);
-				bw.write("[" + writeperson.getNum() + "]");
-				bw.write(writeperson.getName() + "\t");
-				bw.write(writeperson.getAge() + "\t");
-				bw.write(writeperson.getTel());
-				bw.write("\r\n");
+			for (int i = 0; i < person.size(); i++) { // 연락처 list size 만큼 반복
+				PersonInfo writeperson = (PersonInfo) person.get(i); // i번째 객체 가져오기
+				bw.write("[" + writeperson.getNum() + "]"); // 순서 쓰기
+				bw.write(writeperson.getName() + "\t"); // 이름 쓰기
+				bw.write(writeperson.getAge() + "\t"); // 나이 쓰기
+				bw.write(writeperson.getTel()); // 번호 쓰기
+				bw.write("\r\n"); //
 			}
+			bw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				bw.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }
 
-class PersonInfo {
-	private int num;
-	private String name;
-	private String age;
-	private String tel;
+class PersonInfo { // 사용자 정보를 저장할 클래스 생성
+	private int num; // 순서
+	private String name; // 이름
+	private String age; // 나이
+	private String tel; // 전화번호
 
-	public PersonInfo(String name, String age, String tel) {
+	public PersonInfo(String name, String age, String tel) { // 이름, 나이, 전화번호를 받아 객체를 생성하는 생성자
 		this.name = name;
 		this.age = age;
 		this.tel = tel;
 	}
 
+	// 순서, 이름, 나이, 전화번호를 반환하는 메소드
 	public int getNum() {
 		return num;
 	}
-
-	public void setNum(int num) {
-		this.num = num;
-	}
-
 	public String getName() {
 		return name;
+	}
+	public String getAge() {
+		return age;
+	}
+	public String getTel() {
+		return tel;
+	}
+
+	// 순서, 이름, 나이, 전화번호를 변경하는 메소드
+	public void setNum(int num) {
+		this.num = num;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getAge() {
-		return age;
-	}
 
 	public void setAge(String age) {
 		this.age = age;
 	}
 
-	public String getTel() {
-		return tel;
-	}
 
 	public void setTel(String tel) {
 		this.tel = tel;
