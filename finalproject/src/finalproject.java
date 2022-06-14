@@ -209,7 +209,7 @@ public class finalproject {
 						PersonInfo n = (PersonInfo) person.get(i); // i번째 person list 객체를 가져옴
 						if (n.getTel().equals(str2)) { // i번째 객체와 입력받은 연락처 번호과 같은지 확인
 							person.remove(i); // i번째 객체 제거
-							System.out.print(n.getNum() + "번 연락처가 삭제되었습니다.\n");
+							System.out.print((n.getNum()+1) + "번 연락처가 삭제되었습니다.\n");
 							System.out.println();
 							update(person); // 넘버링
 							writeTxt(person); // 파일 쓰기
