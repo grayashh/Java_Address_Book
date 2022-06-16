@@ -14,6 +14,7 @@ public class finalproject {
 	static final String ROOT_PATH = System.getProperty("user.dir"); // 현재 작업중인 디렉토리를 가져옴
 	static final String ADDRESS = ROOT_PATH + "//juso.txt"; // juso.txt를 저장할 위치 지정
 	static File file = new File(ADDRESS); // file을 ADDRESS 위치에 생성
+	static boolean run = true; // 메뉴 반복 true
 
 	public static void main(String[] args) throws IOException {
 		//Intro
@@ -21,7 +22,8 @@ public class finalproject {
 		System.out.println("[연락처 관리 프로그램]");
 
 		List<PersonInfo> person = new ArrayList<>(); // person List 객체를 생성
-
+		
+		while (run){
 		if (file.createNewFile()) { // 파일이 없다면 print_menu로 파일이 있다면 readTxT 후 print_menu
 			print_menu(person);
 		} else {
@@ -29,11 +31,10 @@ public class finalproject {
 			print_menu(person);
 		}
 	}
+	}
 
 	//메뉴 출력
 	private static void print_menu(List<PersonInfo> person)throws IOException {
-		boolean run = true; // 메뉴 반복 true
-		while (run) {
 			boolean in_run = true;
 			int num = 0;
 			Scanner sc = new Scanner(System.in); // Scanner 객체 생성
@@ -67,6 +68,7 @@ public class finalproject {
 				}
 				case 4 -> { // 프로그램 종료
 					System.out.println("프로그램을 종료합니다.");
+					in_run = false;
 					run = false;
 					System.exit(0);
 				}
@@ -81,7 +83,6 @@ public class finalproject {
 				System.out.print("잘못된 메뉴입니다. 메뉴를 다시 선택하세요: ");
 			}
 		}
-	}
 }
 
 	// 주소록 출력
@@ -288,7 +289,7 @@ public class finalproject {
 				bw.write(writeperson.getName() + "\t"); // 이름 쓰기
 				bw.write(writeperson.getAge() + "\t"); // 나이 쓰기
 				bw.write(writeperson.getTel()); // 번호 쓰기
-				bw.write("\r\n"); //
+				bw.write("\r\n"); // 한줄 띄어쓰기
 			}
 			bw.close();
 		} catch (Exception e) {
